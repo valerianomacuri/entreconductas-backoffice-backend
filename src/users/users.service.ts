@@ -36,6 +36,11 @@ export class UsersService {
     return user;
   }
 
+  async findByEmail(email: string): Promise<User | null> {
+    this.logger.log(`Fetching user with email: ${email}`);
+    return this.usersRepository.findByEmail(email);
+  }
+
   async findAll(): Promise<User[]> {
     this.logger.log('Fetching all users');
     const users = await this.usersRepository.findAll();

@@ -1,14 +1,16 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Patch,
-  Delete,
-  Param,
   Body,
+  Controller,
+  Delete,
+  Get,
   HttpCode,
   HttpStatus,
+  Param,
+  Patch,
+  Post,
   Query,
+  SetMetadata,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -16,11 +18,14 @@ import {
   ApiResponse,
   ApiParam,
   ApiQuery,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { RoleGuard, ROLE_KEY } from '../auth/role.guard';
 
 @ApiTags('users')
 @Controller('users')
@@ -44,8 +49,11 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @SetMetadata(ROLE_KEY, 'admin')
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, description: 'List of all users', type: [User] })
+  @ApiBearerAuth()
   @ApiQuery({
     name: 'page',
     required: false,

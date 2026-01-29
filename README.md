@@ -98,16 +98,6 @@ src/
 
 The application provides automatic Swagger documentation at `/api-docs`.
 
-### Users Endpoints
-
-| Method | Endpoint     | Description     |
-| ------ | ------------ | --------------- |
-| GET    | `/users`     | Get all users   |
-| GET    | `/users/:id` | Get user by ID  |
-| POST   | `/users`     | Create new user |
-| PATCH  | `/users/:id` | Update user     |
-| DELETE | `/users/:id` | Delete user     |
-
 ### Default Users (after seeding)
 
 - **Admin:** `admin@entreconductas.com` / `admin123`
@@ -180,21 +170,6 @@ The application includes Docker support with:
 - **Docker Compose** with MongoDB integration
 - **Environment variables** configuration
 - **Health checks** and restart policies
-
-## 📝 User Entity Schema
-
-```typescript
-{
-  id: string; // MongoDB ObjectId
-  name: string; // User full name
-  email: string; // Unique email address
-  password: string; // Hashed password
-  role: 'admin' | 'manager'; // User role
-  isActive: boolean; // Account status
-  createdAt: Date; // Creation timestamp
-  updatedAt: Date; // Last update timestamp
-}
-```
 
 ## 🔄 Development Workflow
 
