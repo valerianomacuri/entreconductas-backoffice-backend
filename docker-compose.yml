@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  # MongoDB service
+  mongodb:
+    image: mongo:6.0
+    container_name: entreconductas-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: entreconductas
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - entreconductas-network
+
+  # NestJS application
+  # api:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: entreconductas-api
+  #   restart: unless-stopped
+  #   environment:
+  #     NODE_ENV: production
+  #     PORT: 3000
+  #     MONGODB_URI: mongodb://admin:password123@mongodb:27017/entreconductas?authSource=admin
+  #   ports:
+  #     - '3000:3000'
+  #   depends_on:
+  #     - mongodb
+  #   volumes:
+  #     - ./src:/app/src
+  #     - /app/node_modules
+  #   networks:
+  #     - entreconductas-network
+  #   command: npm run start:prod
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  entreconductas-network:
+    driver: bridge

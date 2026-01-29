@@ -1,98 +1,209 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Entreconductas Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A production-ready NestJS backend application for Entreconductas backoffice management.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Features
 
-## Description
+- **Monolithic HTTP-only NestJS App** - Clean, scalable architecture
+- **MongoDB Integration** - Using Mongoose for data persistence
+- **User Management** - Full CRUD operations with role-based access
+- **Password Security** - Automatic hashing with bcrypt
+- **API Documentation** - Swagger/OpenAPI documentation at `/api-docs`
+- **TypeScript** - Full type safety
+- **Docker Support** - Ready for containerized deployment
+- **Data Seeding** - Initial admin user creation
+- **Validation** - Using class-validator and class-transformer
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📁 Project Structure
 
-## Project setup
-
-```bash
-$ pnpm install
+```
+src/
+├── main.ts                 # Application entry point
+├── app.module.ts           # Root application module
+├── config/
+│   └── database.config.ts  # MongoDB configuration
+├── users/
+│   ├── dto/                # Data Transfer Objects
+│   │   ├── create-user.dto.ts
+│   │   └── update-user.dto.ts
+│   ├── entities/           # Mongoose schemas
+│   │   └── user.entity.ts
+│   ├── users.controller.ts # REST endpoints
+│   ├── users.service.ts    # Business logic
+│   ├── users.repository.ts # Data access layer
+│   └── users.module.ts     # Users module configuration
+└── shared/
+    └── utils/              # Shared utilities
+        └── password.utils.ts
 ```
 
-## Compile and run the project
+## 🛠️ Installation & Setup
+
+### Prerequisites
+
+- Node.js (v18+)
+- MongoDB (or use Docker)
+- npm or yarn
+
+### Local Development
+
+1. **Install dependencies:**
+
+   ```bash
+   npm install
+   ```
+
+2. **Environment setup:**
+
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+3. **Start MongoDB (if not using Docker):**
+
+   ```bash
+   mongod
+   ```
+
+4. **Run the application:**
+
+   ```bash
+   # Development mode
+   npm run start:dev
+
+   # Production mode
+   npm run build
+   npm run start:prod
+   ```
+
+5. **Seed initial data:**
+   ```bash
+   npm run seed
+   ```
+
+### Docker Setup
+
+1. **Build and run with Docker Compose:**
+
+   ```bash
+   docker-compose up -d
+   ```
+
+2. **Access the application:**
+   - API: http://localhost:3000
+   - Swagger Documentation: http://localhost:3000/api-docs
+
+## 📚 API Documentation
+
+The application provides automatic Swagger documentation at `/api-docs`.
+
+### Users Endpoints
+
+| Method | Endpoint     | Description     |
+| ------ | ------------ | --------------- |
+| GET    | `/users`     | Get all users   |
+| GET    | `/users/:id` | Get user by ID  |
+| POST   | `/users`     | Create new user |
+| PATCH  | `/users/:id` | Update user     |
+| DELETE | `/users/:id` | Delete user     |
+
+### Default Users (after seeding)
+
+- **Admin:** `admin@entreconductas.com` / `admin123`
+- **Manager:** `manager@entreconductas.com` / `manager123`
+
+## 🔧 Environment Variables
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+NODE_ENV=development
+PORT=3000
+MONGODB_URI=mongodb://localhost:27017/entreconductas
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
+JWT_EXPIRES_IN=24h
+CORS_ORIGIN=http://localhost:3000
 ```
 
-## Run tests
+## 🚀 Available Scripts
 
 ```bash
-# unit tests
-$ pnpm run test
+# Development
+npm run start:dev          # Start in watch mode
+npm run start:debug        # Start in debug mode
 
-# e2e tests
-$ pnpm run test:e2e
+# Production
+npm run build             # Build the application
+npm run start:prod        # Start production build
 
-# test coverage
-$ pnpm run test:cov
+# Testing
+npm run test              # Run unit tests
+npm run test:cov          # Run tests with coverage
+npm run test:e2e          # Run end-to-end tests
+
+# Code Quality
+npm run lint              # Run ESLint
+npm run format            # Format code with Prettier
+
+# Database
+npm run seed              # Seed database with initial data
 ```
 
-## Deployment
+## 🏗️ Architecture
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### Layered Architecture
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+1. **Controller Layer** - Handles HTTP requests and responses
+2. **Service Layer** - Contains business logic and orchestrates data flow
+3. **Repository Layer** - Manages data persistence and database operations
+4. **Entity Layer** - Defines data models and schemas
 
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+### Key Features
+
+- **Separation of Concerns:** Each layer has a specific responsibility
+- **Dependency Injection:** Uses NestJS DI container for loose coupling
+- **Error Handling:** Centralized error handling with proper HTTP status codes
+- **Logging:** Integrated logging for debugging and monitoring
+- **Validation:** Input validation using class-validator decorators
+
+## 🔐 Security Features
+
+- Password hashing with bcrypt (salt rounds: 10)
+- Input validation and sanitization
+- CORS configuration
+- Environment-based configuration
+
+## 🐳 Docker Configuration
+
+The application includes Docker support with:
+
+- **Multi-stage Dockerfile** for optimized production builds
+- **Docker Compose** with MongoDB integration
+- **Environment variables** configuration
+- **Health checks** and restart policies
+
+## 📝 User Entity Schema
+
+```typescript
+{
+  id: string; // MongoDB ObjectId
+  name: string; // User full name
+  email: string; // Unique email address
+  password: string; // Hashed password
+  role: 'admin' | 'manager'; // User role
+  isActive: boolean; // Account status
+  createdAt: Date; // Creation timestamp
+  updatedAt: Date; // Last update timestamp
+}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 🔄 Development Workflow
 
-## Resources
+1. **Make changes** to source code
+2. **Run tests:** `npm run test`
+3. **Lint code:** `npm run lint`
+4. **Build application:** `npm run build`
+5. **Test locally:** `npm run start:dev`
 
-Check out a few resources that may come in handy when working with NestJS:
+## 📄 License
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is proprietary and confidential.
