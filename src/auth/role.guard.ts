@@ -1,39 +1,28 @@
-// RoleGuard enforces single-role authorization on handlers that declare metadata.
+// RoleGuard ensures only admin users can access guarded handlers.
+// Apply alongside JwtAuthGuard using @UseGuards(JwtAuthGuard, RoleGuard) so the
+// request includes a validated JWT payload before the role check runs.
 import {
   CanActivate,
   ExecutionContext,
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
-import { UserRole } from '../users/entities/user.entity';
-
-export const ROLE_KEY = 'role';
 
 @Injectable()
 export class RoleGuard implements CanActivate {
-  constructor(private readonly reflector: Reflector) {}
-
   canActivate(context: ExecutionContext): boolean {
-    const requiredRole = this.reflector.getAllAndOverride<UserRole>(ROLE_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-
-    if (!requiredRole) {
-      return true;
-    }
-
     const request = context.switchToHttp().getRequest<{ user?: JwtPayload }>();
     const user = request.user;
 
-    if (!user?.role) {
-      throw new ForbiddenException('Role missing from authenticated user');
+    if (!user) {
+      throw new ForbiddenException('Authenticated user context is required');
     }
 
-    if (user.role !== requiredRole) {
-      throw new ForbiddenException('Insufficient role permissions');
+    if (user.role !== 'admin') {
+      throw new ForbiddenException(
+        'Admin role is required to access this route',
+      );
     }
 
     return true;

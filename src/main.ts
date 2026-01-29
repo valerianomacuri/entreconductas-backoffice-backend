@@ -10,6 +10,16 @@ async function bootstrap() {
     .setTitle('Entreconductas Backend API')
     .setDescription('API documentation for Entreconductas backoffice backend')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        description: 'Ingresa tu token JWT',
+      },
+      'JWT-auth',
+    )
     .addTag('users')
     .build();
 
