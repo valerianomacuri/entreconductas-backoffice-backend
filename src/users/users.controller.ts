@@ -20,7 +20,7 @@ import {
   ApiBearerAuth,
   ApiForbiddenResponse,
 } from '@nestjs/swagger';
-import { User } from './entities/user.entity';
+import { User, UserDocument } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
@@ -53,7 +53,7 @@ export class UsersController {
     status: 403,
     description: 'Forbidden. Only admin users can invoke this operation.',
   })
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserDocument> {
     return this.usersService.create(createUserDto);
   }
 
@@ -80,7 +80,7 @@ export class UsersController {
   async findAll(
     @Query('page') page?: number,
     @Query('limit') limit?: number,
-  ): Promise<User[]> {
+  ): Promise<UserDocument[]> {
     return this.usersService.findAll();
   }
 
@@ -97,7 +97,7 @@ export class UsersController {
     status: 403,
     description: 'Forbidden. Only admin users can invoke this operation.',
   })
-  async findById(@Param('id') id: string): Promise<User> {
+  async findById(@Param('id') id: string): Promise<UserDocument> {
     return this.usersService.findById(id);
   }
 
@@ -122,7 +122,7 @@ export class UsersController {
   async update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<User> {
+  ): Promise<UserDocument> {
     return this.usersService.update(id, updateUserDto);
   }
 

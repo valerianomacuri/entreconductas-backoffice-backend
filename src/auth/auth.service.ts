@@ -5,7 +5,7 @@ import { UsersService } from '../users/users.service';
 import { comparePassword } from '../shared/utils/password.utils';
 import { LoginDto } from './dto/login.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
-import { User } from '../users/entities/user.entity';
+import { UserDocument } from '../users/entities/user.entity';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
@@ -15,14 +15,14 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private buildPayload(user: User): JwtPayload {
+  private buildPayload(user: UserDocument): JwtPayload {
     return {
       userId: user.id as string,
       role: user.role,
     };
   }
 
-  async validateUser(email: string, password: string): Promise<User> {
+  async validateUser(email: string, password: string): Promise<UserDocument> {
     const user = await this.usersService.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
@@ -46,7 +46,7 @@ export class AuthService {
     };
   }
 
-  async me(payload: JwtPayload): Promise<User> {
+  async me(payload: JwtPayload): Promise<UserDocument> {
     const user = await this.usersService.findById(payload.userId);
 
     if (!user) {

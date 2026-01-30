@@ -4,7 +4,7 @@ import {
   ConflictException,
   NotFoundException,
 } from '@nestjs/common';
-import { User } from './entities/user.entity';
+import { UserDocument } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
@@ -16,7 +16,7 @@ export class UsersService {
 
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<UserDocument> {
     this.logger.log(`Creating user with email: ${createUserDto.email}`);
 
     const existingUser = await this.usersRepository.findByEmail(
@@ -36,19 +36,19 @@ export class UsersService {
     return user;
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<UserDocument | null> {
     this.logger.log(`Fetching user with email: ${email}`);
     return this.usersRepository.findByEmail(email);
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<UserDocument[]> {
     this.logger.log('Fetching all users');
     const users = await this.usersRepository.findAll();
     this.logger.log(`Found ${users.length} users`);
     return users;
   }
 
-  async findById(id: string): Promise<User> {
+  async findById(id: string): Promise<UserDocument> {
     this.logger.log(`Fetching user with ID: ${id}`);
     const user = await this.usersRepository.findById(id);
 
@@ -60,7 +60,10 @@ export class UsersService {
     return user;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserDocument> {
     this.logger.log(`Updating user with ID: ${id}`);
 
     const existingUser = await this.usersRepository.findById(id);

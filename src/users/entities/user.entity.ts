@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 // users/schemas/user.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
@@ -10,10 +12,13 @@ export type UserRole = 'admin' | 'manager';
   toJSON: {
     virtuals: true,
     versionKey: false,
+    transform: (_, ret: any) => {
+      ret.id = ret._id;
+      delete ret._id;
+    },
   },
 })
 export class User {
-  [x: string]: any;
   @Prop({ required: true })
   name: string;
 
