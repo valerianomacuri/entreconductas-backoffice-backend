@@ -27,7 +27,6 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
-
     const isPasswordValid = await comparePassword(password, user.password);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
@@ -43,9 +42,21 @@ export class AuthService {
 
     return {
       access_token: accessToken,
+      user,
     };
   }
 
+  async me(payload: JwtPayload): Promise<User> {
+    const user = await this.usersService.findById(payload.userId);
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    return user;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/require-await
   async validateTokenPayload(payload: JwtPayload): Promise<JwtPayload> {
     return payload;
   }

@@ -5,6 +5,9 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Set global prefix for all routes
+  app.setGlobalPrefix('api');
+
   // Swagger configuration
   const config = new DocumentBuilder()
     .setTitle('Entreconductas Backend API')

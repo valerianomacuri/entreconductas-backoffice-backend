@@ -1,10 +1,19 @@
+// users/schemas/user.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 
+export type UserDocument = HydratedDocument<User>;
 export type UserRole = 'admin' | 'manager';
 
-@Schema({ timestamps: true })
-export class User extends Document {
+@Schema({
+  timestamps: true,
+  toJSON: {
+    virtuals: true,
+    versionKey: false,
+  },
+})
+export class User {
+  [x: string]: any;
   @Prop({ required: true })
   name: string;
 
@@ -17,7 +26,7 @@ export class User extends Document {
   @Prop({ required: true, enum: ['admin', 'manager'] })
   role: UserRole;
 
-  @Prop({ required: true, default: true })
+  @Prop({ default: true })
   isActive: boolean;
 }
 

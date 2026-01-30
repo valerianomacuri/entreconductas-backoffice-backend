@@ -12,7 +12,7 @@ async function seed() {
   try {
     // Check if admin user already exists
     const existingAdmin = await usersService['usersRepository'].findByEmail(
-      'admin@entreconductas.com',
+      'admin@entreconductas.org',
     );
 
     if (existingAdmin) {
@@ -21,7 +21,7 @@ async function seed() {
       // Create admin user
       const adminUserDto: CreateUserDto = {
         name: 'System Administrator',
-        email: 'admin@entreconductas.com',
+        email: 'admin@entreconductas.org',
         password: 'admin123',
         role: 'admin',
         isActive: true,
@@ -33,7 +33,7 @@ async function seed() {
 
     // Create a sample manager user
     const existingManager = await usersService['usersRepository'].findByEmail(
-      'manager@entreconductas.com',
+      'manager@entreconductas.org',
     );
 
     if (existingManager) {
@@ -41,7 +41,7 @@ async function seed() {
     } else {
       const managerUserDto: CreateUserDto = {
         name: 'Sample Manager',
-        email: 'manager@entreconductas.com',
+        email: 'manager@entreconductas.org',
         password: 'manager123',
         role: 'manager',
         isActive: true,
