@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Injectable,
   Logger,
@@ -9,12 +11,17 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
 import { hashPassword } from '../shared/utils/password.utils';
+import { FindAllUsersDto } from './dto/find-all-users.dto';
+import { RolesService } from '@/roles/roles.service';
 
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
 
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly rolesService: RolesService,
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserDocument> {
     this.logger.log(`Creating user with email: ${createUserDto.email}`);
@@ -41,9 +48,26 @@ export class UsersService {
     return this.usersRepository.findByEmail(email);
   }
 
-  async findAll(): Promise<UserDocument[]> {
+  async findAll(query: FindAllUsersDto): Promise<UserDocument[]> {
+    let roleDoc;
+
+    if (query.role) {
+      this.logger.log(`Looking up role: ${query.role}`);
+      roleDoc = await this.rolesService.findByName(query.role);
+    }
+
+    if (!roleDoc) {
+      this.logger.log(`No users found for role: ${query.role}`);
+      return [];
+    }
+
+    if (roleDoc) {
+      this.logger.log(`Filtering users by role: ${query.role}`);
+      query = { ...query, role: roleDoc._id };
+    }
+
     this.logger.log('Fetching all users');
-    const users = await this.usersRepository.findAll();
+    const users = await this.usersRepository.findAll(query);
     this.logger.log(`Found ${users.length} users`);
     return users;
   }

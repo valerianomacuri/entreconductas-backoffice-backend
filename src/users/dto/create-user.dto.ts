@@ -5,6 +5,7 @@ import {
   IsOptional,
   MinLength,
   IsNotEmpty,
+  IsMongoId,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -23,7 +24,7 @@ export class CreateUserDto {
   password: string;
 
   @ApiProperty({ description: 'Role ID', example: '507f1f77bcf86cd799439011' })
-  @IsString()
+  @IsMongoId()
   @IsNotEmpty()
   roleId: string;
 

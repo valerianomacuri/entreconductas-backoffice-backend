@@ -1,12 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Set global prefix for all routes
   app.setGlobalPrefix('api');
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, // elimina propiedades no definidas en el DTO
+      forbidNonWhitelisted: true, // lanza error si hay propiedades extra
+    }),
+  );
 
   // Swagger configuration
   const config = new DocumentBuilder()

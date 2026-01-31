@@ -26,6 +26,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { RoleGuard } from '../auth/role.guard';
+import { FindAllUsersDto } from './dto/find-all-users.dto';
 
 @ApiTags('users')
 @ApiBearerAuth('JWT-auth')
@@ -77,13 +78,8 @@ export class UsersController {
     status: 403,
     description: 'Forbidden. Only admin users can invoke this operation.',
   })
-  async findAll(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    @Query('page') page?: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    @Query('limit') limit?: number,
-  ): Promise<UserDocument[]> {
-    return this.usersService.findAll();
+  async findAll(@Query() query: FindAllUsersDto): Promise<UserDocument[]> {
+    return this.usersService.findAll(query);
   }
 
   @Get(':id')

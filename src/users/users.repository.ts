@@ -5,6 +5,7 @@ import { Model, Types } from 'mongoose';
 import { User, UserDocument } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { FindAllUsersDto } from './dto/find-all-users.dto';
 
 @Injectable()
 export class UsersRepository {
@@ -21,9 +22,11 @@ export class UsersRepository {
     return user.save();
   }
 
-  async findAll(): Promise<UserDocument[]> {
+  async findAll(query: FindAllUsersDto): Promise<UserDocument[]> {
+    const { orderByDate, ...restQuery } = query;
     return this.userModel
-      .find()
+      .find({ ...restQuery })
+      .sort({ createdAt: orderByDate === 'asc' ? 1 : -1 })
       .populate({
         path: 'role',
         populate: {
