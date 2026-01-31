@@ -6,6 +6,7 @@ import { UsersService } from './users.service';
 import { UsersRepository } from './users.repository';
 import { User, UserSchema } from './entities/user.entity';
 import databaseConfig from '../config/database.config';
+import { RolesModule } from '../roles/roles.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import databaseConfig from '../config/database.config';
       inject: [ConfigService],
     }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    RolesModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository],

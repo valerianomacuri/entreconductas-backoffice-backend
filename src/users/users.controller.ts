@@ -78,7 +78,9 @@ export class UsersController {
     description: 'Forbidden. Only admin users can invoke this operation.',
   })
   async findAll(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Query('page') page?: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Query('limit') limit?: number,
   ): Promise<UserDocument[]> {
     return this.usersService.findAll();

@@ -1,55 +1,38 @@
-import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsString,
-  IsEnum,
-  IsOptional,
-  MinLength,
-} from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEmail, IsString, IsOptional, MinLength } from 'class-validator';
 
 export class UpdateUserDto {
-  @ApiProperty({
-    description: 'User name',
-    example: 'John Doe',
-    required: false,
-  })
+  @ApiPropertyOptional({ description: 'User name', example: 'John Doe' })
   @IsString()
   @IsOptional()
   name?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'User email',
     example: 'john@example.com',
-    required: false,
   })
   @IsEmail()
   @IsOptional()
   email?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'User password',
     example: 'newpassword123',
-    required: false,
   })
   @IsString()
   @MinLength(6)
   @IsOptional()
   password?: string;
 
-  @ApiProperty({
-    description: 'User role',
-    enum: ['admin', 'manager'],
-    example: 'admin',
-    required: false,
+  @ApiPropertyOptional({
+    description: 'Role ID',
+    example: '507f1f77bcf86cd799439011',
   })
-  @IsEnum(['admin', 'manager'])
+  @IsString()
   @IsOptional()
-  role?: 'admin' | 'manager';
+  roleId?: string;
 
-  @ApiProperty({
-    description: 'User active status',
-    required: false,
-  })
+  @ApiPropertyOptional({ description: 'User active status' })
   @IsOptional()
   isActive?: boolean;
 }

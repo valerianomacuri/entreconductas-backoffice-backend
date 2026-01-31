@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 // AuthService coordinates login flow, credential verification, and JWT issuance.
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -16,9 +19,10 @@ export class AuthService {
   ) {}
 
   private buildPayload(user: UserDocument): JwtPayload {
+    const roleName = (user.role as any)?.name || (user.role as any)?.toString();
     return {
       userId: user.id as string,
-      role: user.role,
+      role: roleName as 'admin' | 'manager',
     };
   }
 
