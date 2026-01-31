@@ -25,7 +25,13 @@ export class RolesRepository {
   }
 
   async findAll(): Promise<RoleDocument[]> {
-    return this.roleModel.find().populate('permissions').exec();
+    return this.roleModel
+      .find()
+      .populate({
+        path: 'permissions',
+        model: 'Permission',
+      })
+      .exec();
   }
 
   async findById(id: string): Promise<RoleDocument | null> {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
@@ -15,13 +16,6 @@ export type RoleDocument = Role & Document;
     transform: (_, ret: any) => {
       ret.id = ret._id;
       delete ret._id;
-      if (ret.permissions) {
-        ret.permissions = ret.permissions.map((p: any) => ({
-          id: p._id,
-          module: p.module,
-          actions: p.actions,
-        }));
-      }
     },
   },
 })
@@ -41,7 +35,7 @@ export class Role {
     type: [Object],
     description: 'Permissions associated with this role',
   })
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Permission' }], default: [] })
+  @Prop([{ type: Types.ObjectId, ref: 'Permission' }])
   permissions: Types.ObjectId[];
 }
 

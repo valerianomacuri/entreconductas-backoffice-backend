@@ -26,7 +26,10 @@ export class UsersRepository {
       .find()
       .populate({
         path: 'role',
-        populate: { path: 'permissions' },
+        populate: {
+          path: 'permissions',
+          model: 'Permission',
+        },
       })
       .exec();
   }
