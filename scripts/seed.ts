@@ -19,10 +19,10 @@ async function seed() {
   try {
     const appModuleToCreate: CreateAppModuleDto[] = [
       { name: 'users' },
-      { name: 'applicants' },
+      { name: 'applications' },
       { name: 'calls' },
-      { name: 'dashboard' },
       { name: 'areas' },
+      { name: 'dashboard' },
       { name: 'roles' },
       { name: 'app-modules' },
     ];

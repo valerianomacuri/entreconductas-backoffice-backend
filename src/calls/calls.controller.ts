@@ -25,6 +25,7 @@ import { CallsService } from './calls.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { ModulePermission } from '@/auth/module.decorator';
 import { ModuleAccessGuard } from '@/auth/module-access.guard';
+import { Public } from '@/auth/public.decorator';
 
 @ApiTags('calls')
 @ApiBearerAuth('JWT-auth')
@@ -69,6 +70,7 @@ export class CallsController {
     return this.callsService.findAll();
   }
 
+  @Public()
   @Get(':id')
   @ApiOperation({
     summary: 'Get call by ID',

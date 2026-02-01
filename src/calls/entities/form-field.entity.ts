@@ -7,7 +7,10 @@ export type FormFieldDocument = FormField & Document;
 
 @Schema({ _id: false })
 export class FormField {
-  @ApiProperty({ description: 'Field identifier', example: 'field-001' })
+  @ApiProperty({
+    description: 'Field identifier',
+    example: 'por-que-quieres-ser-voluntario-x9k3d',
+  })
   @Prop({ required: true })
   id: string;
 
