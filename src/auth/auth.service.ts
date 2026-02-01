@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -19,10 +20,17 @@ export class AuthService {
   ) {}
 
   private buildPayload(user: UserDocument): JwtPayload {
-    const roleName = (user.role as any)?.name || (user.role as any)?.toString();
+    const roleName = (user.role as any)?.name;
+    const roleId = (user.role as any)?.id;
+    const roleModules = (user.role as any)?.modules?.map((m: any) => m.name);
+
     return {
-      userId: user.id as string,
-      role: roleName as 'admin' | 'manager',
+      sub: user.id as string,
+      role: {
+        id: roleId,
+        name: roleName,
+        modules: roleModules || [],
+      },
     };
   }
 
@@ -51,7 +59,7 @@ export class AuthService {
   }
 
   async me(payload: JwtPayload): Promise<UserDocument> {
-    const user = await this.usersService.findById(payload.userId);
+    const user = await this.usersService.findById(payload.sub);
 
     if (!user) {
       throw new UnauthorizedException('User not found');

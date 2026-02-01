@@ -23,10 +23,13 @@ import { CreateCallDto } from './dto/create-call.dto';
 import { UpdateCallDto } from './dto/update-call.dto';
 import { CallsService } from './calls.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
+import { ModulePermission } from '@/auth/module.decorator';
+import { ModuleAccessGuard } from '@/auth/module-access.guard';
 
 @ApiTags('calls')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard)
+@ModulePermission('calls')
+@UseGuards(JwtAuthGuard, ModuleAccessGuard)
 @Controller('calls')
 export class CallsController {
   constructor(private readonly callsService: CallsService) {}

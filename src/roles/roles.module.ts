@@ -4,12 +4,12 @@ import { RolesService } from './roles.service';
 import { RolesRepository } from './roles.repository';
 import { RolesController } from './roles.controller';
 import { Role, RoleSchema } from './entities/role.entity';
-import { PermissionsModule } from '../permissions/permissions.module';
+import { AppModulesModule } from '@/app-modules/app-modules.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Role.name, schema: RoleSchema }]),
-    PermissionsModule,
+    AppModulesModule,
   ],
   controllers: [RolesController],
   providers: [RolesService, RolesRepository],

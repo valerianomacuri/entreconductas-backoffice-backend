@@ -25,12 +25,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
-import { RoleGuard } from '../auth/role.guard';
 import { FindAllUsersDto } from './dto/find-all-users.dto';
+import { ModulePermission } from '@/auth/module.decorator';
+import { ModuleAccessGuard } from '@/auth/module-access.guard';
 
 @ApiTags('users')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard, RoleGuard)
+@ModulePermission('users')
+@UseGuards(JwtAuthGuard, ModuleAccessGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

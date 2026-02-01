@@ -14,12 +14,10 @@ export class RolesRepository {
   ) {}
 
   async create(createRoleDto: CreateRoleDto): Promise<RoleDocument> {
-    const permissionIds = createRoleDto.permissions.map(
-      (id) => new Types.ObjectId(id),
-    );
+    const moduleIds = createRoleDto.modules.map((id) => new Types.ObjectId(id));
     const role = new this.roleModel({
       ...createRoleDto,
-      permissions: permissionIds,
+      modules: moduleIds,
     });
     return role.save();
   }
@@ -28,18 +26,18 @@ export class RolesRepository {
     return this.roleModel
       .find()
       .populate({
-        path: 'permissions',
-        model: 'Permission',
+        path: 'modules',
+        model: 'AppModule',
       })
       .exec();
   }
 
   async findById(id: string): Promise<RoleDocument | null> {
-    return this.roleModel.findById(id).populate('permissions').exec();
+    return this.roleModel.findById(id).populate('modules').exec();
   }
 
   async findByName(name: string): Promise<RoleDocument | null> {
-    return this.roleModel.findOne({ name }).populate('permissions').exec();
+    return this.roleModel.findOne({ name }).populate('modules').exec();
   }
 
   async update(
@@ -47,14 +45,14 @@ export class RolesRepository {
     updateRoleDto: UpdateRoleDto,
   ): Promise<RoleDocument | null> {
     const updateData: any = { ...updateRoleDto };
-    if (updateRoleDto.permissions) {
-      updateData.permissions = updateRoleDto.permissions.map(
+    if (updateRoleDto.modules) {
+      updateData.modules = updateRoleDto.modules.map(
         (id) => new Types.ObjectId(id),
       );
     }
     return this.roleModel
       .findByIdAndUpdate(id, updateData, { new: true })
-      .populate('permissions')
+      .populate('modules')
       .exec();
   }
 
@@ -68,31 +66,31 @@ export class RolesRepository {
     return role !== null;
   }
 
-  async addPermission(
+  async addModule(
     roleId: string,
-    permissionId: string,
+    moduleId: string,
   ): Promise<RoleDocument | null> {
     return this.roleModel
       .findByIdAndUpdate(
         roleId,
-        { $addToSet: { permissions: new Types.ObjectId(permissionId) } },
+        { $addToSet: { modules: new Types.ObjectId(moduleId) } },
         { new: true },
       )
-      .populate('permissions')
+      .populate('modules')
       .exec();
   }
 
-  async removePermission(
+  async removeModule(
     roleId: string,
-    permissionId: string,
+    moduleId: string,
   ): Promise<RoleDocument | null> {
     return this.roleModel
       .findByIdAndUpdate(
         roleId,
-        { $pull: { permissions: new Types.ObjectId(permissionId) } },
+        { $pull: { modules: new Types.ObjectId(moduleId) } },
         { new: true },
       )
-      .populate('permissions')
+      .populate('modules')
       .exec();
   }
 }

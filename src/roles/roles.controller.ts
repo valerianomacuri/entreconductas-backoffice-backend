@@ -18,11 +18,13 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt.guard';
-import { RoleGuard } from '../auth/role.guard';
+import { ModulePermission } from '@/auth/module.decorator';
+import { ModuleAccessGuard } from '@/auth/module-access.guard';
 
 @ApiTags('roles')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard, RoleGuard)
+@ModulePermission('roles')
+@UseGuards(JwtAuthGuard, ModuleAccessGuard)
 @Controller('roles')
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
@@ -69,27 +71,21 @@ export class RolesController {
     return this.rolesService.delete(id);
   }
 
-  @Post(':id/permissions/:permissionId')
-  @ApiOperation({ summary: 'Add permission to role' })
+  @Post(':id/modules/:moduleId')
+  @ApiOperation({ summary: 'Add module to role' })
   @ApiParam({ name: 'id', description: 'Role ID' })
-  @ApiParam({ name: 'permissionId', description: 'Permission ID' })
-  @ApiResponse({ status: 200, description: 'Permission added successfully' })
-  addPermission(
-    @Param('id') id: string,
-    @Param('permissionId') permissionId: string,
-  ) {
-    return this.rolesService.addPermission(id, permissionId);
+  @ApiParam({ name: 'moduleId', description: 'Module ID' })
+  @ApiResponse({ status: 200, description: 'Module added successfully' })
+  addModule(@Param('id') id: string, @Param('moduleId') moduleId: string) {
+    return this.rolesService.addModule(id, moduleId);
   }
 
-  @Delete(':id/permissions/:permissionId')
-  @ApiOperation({ summary: 'Remove permission from role' })
+  @Delete(':id/modules/:moduleId')
+  @ApiOperation({ summary: 'Remove module from role' })
   @ApiParam({ name: 'id', description: 'Role ID' })
-  @ApiParam({ name: 'permissionId', description: 'Permission ID' })
-  @ApiResponse({ status: 200, description: 'Permission removed successfully' })
-  removePermission(
-    @Param('id') id: string,
-    @Param('permissionId') permissionId: string,
-  ) {
-    return this.rolesService.removePermission(id, permissionId);
+  @ApiParam({ name: 'moduleId', description: 'Module ID' })
+  @ApiResponse({ status: 200, description: 'Module removed successfully' })
+  removeModule(@Param('id') id: string, @Param('moduleId') moduleId: string) {
+    return this.rolesService.removeModule(id, moduleId);
   }
 }

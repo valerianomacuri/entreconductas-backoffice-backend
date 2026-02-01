@@ -49,19 +49,19 @@ export class RolesService {
     return this.rolesRepository.delete(id);
   }
 
-  async addPermission(
+  async addModule(
     roleId: string,
-    permissionId: string,
+    moduleId: string,
   ): Promise<RoleDocument | null> {
-    this.logger.log(`Adding permission ${permissionId} to role ${roleId}`);
-    return this.rolesRepository.addPermission(roleId, permissionId);
+    this.logger.log(`Adding module ${moduleId} to role ${roleId}`);
+    return this.rolesRepository.addModule(roleId, moduleId);
   }
 
-  async removePermission(
+  async removeModule(
     roleId: string,
-    permissionId: string,
+    moduleId: string,
   ): Promise<RoleDocument | null> {
-    this.logger.log(`Removing permission ${permissionId} from role ${roleId}`);
-    return this.rolesRepository.removePermission(roleId, permissionId);
+    this.logger.log(`Removing module ${moduleId} from role ${roleId}`);
+    return this.rolesRepository.removeModule(roleId, moduleId);
   }
 }

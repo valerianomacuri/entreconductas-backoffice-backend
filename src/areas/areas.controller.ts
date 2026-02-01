@@ -23,10 +23,13 @@ import { CreateAreaDto } from './dto/create-area.dto';
 import { UpdateAreaDto } from './dto/update-area.dto';
 import { AreasService } from './areas.service';
 import { JwtAuthGuard } from '../auth/jwt.guard';
+import { ModulePermission } from '@/auth/module.decorator';
+import { ModuleAccessGuard } from '@/auth/module-access.guard';
 
 @ApiTags('areas')
 @ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard)
+@ModulePermission('areas')
+@UseGuards(JwtAuthGuard, ModuleAccessGuard)
 @Controller('areas')
 export class AreasController {
   constructor(private readonly areasService: AreasService) {}

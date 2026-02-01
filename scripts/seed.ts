@@ -1,72 +1,70 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../src/app.module';
-import { PermissionsService } from '../src/permissions/permissions.service';
 import { RolesService } from '../src/roles/roles.service';
 import { UsersService } from '../src/users/users.service';
-import { CreatePermissionDto } from '../src/permissions/dto/permission.dto';
+import { CreateAppModuleDto } from '../src/app-modules/dto/create-app-module.dto';
 import { CreateRoleDto } from '../src/roles/dto/role.dto';
 import { CreateUserDto } from '../src/users/dto/create-user.dto';
+import { AppModulesService } from '@/app-modules/app-modules.service';
 
 async function seed() {
   console.log('Starting database seeding...');
 
   const app = await NestFactory.createApplicationContext(AppModule);
-  const permissionsService = app.get(PermissionsService);
+  const appModulesService = app.get(AppModulesService);
   const rolesService = app.get(RolesService);
   const usersService = app.get(UsersService);
 
   try {
-    const permissionsToCreate: CreatePermissionDto[] = [
-      { module: 'users', actions: ['read', 'write'] },
-      { module: 'applicants', actions: ['read', 'write'] },
-      { module: 'calls', actions: ['read', 'write'] },
-      { module: 'dashboard', actions: ['read', 'write'] },
+    const appModuleToCreate: CreateAppModuleDto[] = [
+      { name: 'users' },
+      { name: 'applicants' },
+      { name: 'calls' },
+      { name: 'dashboard' },
     ];
 
-    const createdPermissions: Record<string, string> = {};
+    const createdAppModules: Record<string, string> = {};
 
-    for (const permDto of permissionsToCreate) {
+    for (const modDto of appModuleToCreate) {
       try {
-        const existing = await permissionsService.findByModule(permDto.module);
+        const existing = await appModulesService.findByName(modDto.name);
         if (existing) {
-          console.log(`Permission ${permDto.module} already exists.`);
-          createdPermissions[permDto.module] = existing.id;
+          console.log(`Module ${modDto.name} already exists.`);
+          createdAppModules[modDto.name] = existing.id;
         } else {
-          const created = await permissionsService.create(permDto);
-          console.log(`Permission ${permDto.module} created successfully.`);
-          createdPermissions[permDto.module] = created.id;
+          const created = await appModulesService.create(modDto);
+          console.log(`Module ${modDto.name} created successfully.`);
+          createdAppModules[modDto.name] = created.id;
         }
       } catch {
-        console.log(
-          `Permission ${permDto.module} already exists (caught exception).`,
-        );
-        const existing = await permissionsService.findByModule(permDto.module);
+        console.log(`Module ${modDto.name} already exists (caught exception).`);
+        const existing = await appModulesService.findByName(modDto.name);
         if (existing) {
-          createdPermissions[permDto.module] = existing.id;
+          createdAppModules[modDto.name] = existing.id;
         }
       }
     }
 
-    const allPermissionIds = Object.values(createdPermissions);
-    const managerPermissionIds = allPermissionIds.filter(
-      (id) => id !== createdPermissions['users'],
+    const allAppModuleId = Object.values(createdAppModules);
+    const managerAppModuleIds = allAppModuleId.filter(
+      (id) => id !== createdAppModules['users'],
     );
 
     const rolesToCreate: {
       name: string;
       description: string;
-      permissions: string[];
+      modules: string[];
     }[] = [
       {
         name: 'admin',
-        description: 'Administrator with all permissions',
-        permissions: allPermissionIds,
+        description: 'Administrator with all modules',
+        modules: allAppModuleId,
       },
       {
         name: 'manager',
-        description: 'Manager with all permissions except users management',
-        permissions: managerPermissionIds,
+        description: 'Manager with all modules except users management',
+        modules: managerAppModuleIds,
       },
     ];
 
@@ -82,7 +80,7 @@ async function seed() {
           const createRoleDto: CreateRoleDto = {
             name: roleDto.name,
             description: roleDto.description,
-            permissions: roleDto.permissions,
+            modules: roleDto.modules,
           };
           const created = await rolesService.create(createRoleDto);
           console.log(`Role ${roleDto.name} created successfully.`);

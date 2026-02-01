@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
@@ -26,17 +24,17 @@ export class Role {
 
   @ApiProperty({
     description: 'Role description',
-    example: 'Administrator with all permissions',
+    example: 'Administrator with all modules',
   })
   @Prop()
   description: string;
 
   @ApiProperty({
     type: [Object],
-    description: 'Permissions associated with this role',
+    description: 'AppModules associated with this role',
   })
-  @Prop([{ type: Types.ObjectId, ref: 'Permission' }])
-  permissions: Types.ObjectId[];
+  @Prop([{ type: Types.ObjectId, ref: 'AppModule' }])
+  modules: Types.ObjectId[];
 }
 
 export const RoleSchema = SchemaFactory.createForClass(Role);

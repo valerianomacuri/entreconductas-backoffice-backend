@@ -30,8 +30,8 @@ export class UsersRepository {
       .populate({
         path: 'role',
         populate: {
-          path: 'permissions',
-          model: 'Permission',
+          path: 'modules',
+          model: 'AppModule',
         },
       })
       .exec();
@@ -42,6 +42,7 @@ export class UsersRepository {
       .findById(id)
       .populate({
         path: 'role',
+        populate: { path: 'modules', model: 'AppModule' },
       })
       .exec();
   }
@@ -51,6 +52,7 @@ export class UsersRepository {
       .findOne({ email })
       .populate({
         path: 'role',
+        populate: { path: 'modules', model: 'AppModule' },
       })
       .exec();
   }
@@ -68,7 +70,7 @@ export class UsersRepository {
       .findByIdAndUpdate(id, updateData, { new: true })
       .populate({
         path: 'role',
-        populate: { path: 'permissions' },
+        populate: { path: 'modules', model: 'AppModule' },
       })
       .exec();
   }
