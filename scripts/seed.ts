@@ -22,6 +22,7 @@ async function seed() {
       { name: 'applicants' },
       { name: 'calls' },
       { name: 'dashboard' },
+      { name: 'areas' },
     ];
 
     const createdAppModules: Record<string, string> = {};
