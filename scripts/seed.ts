@@ -23,6 +23,8 @@ async function seed() {
       { name: 'calls' },
       { name: 'dashboard' },
       { name: 'areas' },
+      { name: 'roles' },
+      { name: 'app-modules' },
     ];
 
     const createdAppModules: Record<string, string> = {};
@@ -49,7 +51,10 @@ async function seed() {
 
     const allAppModuleId = Object.values(createdAppModules);
     const managerAppModuleIds = allAppModuleId.filter(
-      (id) => id !== createdAppModules['users'],
+      (id) =>
+        id !== createdAppModules['users'] &&
+        id !== createdAppModules['roles'] &&
+        id !== createdAppModules['app-modules'],
     );
 
     const rolesToCreate: {
